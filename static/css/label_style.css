@@ -1,0 +1,17 @@
+.parent {
+    display: inline-flex;
+    width: 100%
+}
+
+.child1 {
+    width: 80%;
+}
+
+.child2 {
+    width: 30%;
+    /* margin-left: 45px; */
+}
+
+.highlight:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}

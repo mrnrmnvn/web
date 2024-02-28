@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style_train.css')}}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <title>Модуль обучения моделей</title>
+    </head>
+    <body style='background: #131245;'>
+        <div style="display:flex; align-items:center; justify-content:space-between; width:97%">
+            <h1 style='margin-left: 50px; margin-top:25px; margin-bottom:25px; color: white;'>Сервис обучения моделей</h1>
+            <form method='POST' action='/back'  id="back" enctype="multipart/form-data">
+                <button class="btn btn-primary btn-lg" type='submit' style='margin-left: 15px; border-radius: var(--bs-border-radius); margin-top: 10px; background: greyblue'>Назад</button>
+            </form>
+        </div>
+            <div class="mb-3">
+                <p style='color: white;'>1. Введите директорию нахождения <b>обучаемой</b> модели</p>
+                <form method='POST' action='/training'  id="model-select" enctype="multipart/form-data">
+                    <select name="model_1" style='margin-left:45px; width:95%' class="selectpicker form-control">
+                        <option name="models_value" value="">Модель не выбрана</option>
+                        {% for m in models %}
+                        <option name="models_value" value="{{m.full_path}}">{{m.relative_path}}</option>
+                        {% endfor %}
+                    </select>
+                    <p style='color: white;'>2. Выберите файл с размеченным датасетом</p>
+                    <input type="file" class="form-control" name="customFile" id="customFile" accept="text/plain" style='width:95%; margin-left: 45px; color: gray; background: white; border: black'>
+                    <p style='color: white;'>3. Введите необходимые тэги через запятую без пробела</p>
+                    <div class="form-floating" style='margin-left: 45px; width:95%'>
+                        <input type="text/plain" class="form-control" name='yourtags'>
+                        <label for="yourtags" style='color: gray'>ARMY,NAVY,AIR_FORCE</label>
+                    </div>
+                    <p style='color: white;'>4. При желании, введите дополнительные параметры обучения вместо параметров по умолчанию</p>
+                    <fieldset disabled="" aria-label="Disabled fieldset example">
+                        <div class="form-floating" style='margin-left: 45px; width:95%'>
+                            <input type="text/plain" class="form-control" name='yourtags'>
+                            <label for="yourtags" style='color: gray'>batch_size=8, max_steps=2000, weight_decay=1e-5, learning_rate=2e-5, output_dir='trained_model', nickname='temp_model', say_when=8, threshold=0.05</label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="mb-3">
+                        <p style="color: white">5. Выберите способ обучения</p>
+                        <div class="form-check" style='margin-left: 50px'>
+                            <input type="radio" name="training_options" class="form-check-input" id="exampleRadio1" value='all_tags'>
+                            <label class="form-check-label" for="exampleRadio1" style="color: white">Обучить <b>одну</b> модель на распознавание всех перечисленных классов</label>
+                        </div>
+                        <div class="mb-3 form-check" style='margin-left: 50px'>
+                            <input type="radio" name="training_options" class="form-check-input" id="exampleRadio2" value='just_one'>
+                            <label class="form-check-label" for="exampleRadio2" style="color: white">Обучить по отдельной модели на <b>каждый</b> класс</label>
+                        </div>
+                      </fieldset>
+                    <p class="lead" style='color: white;'><b>Начать тестирование модели<b/></p>
+                    <div class='btn-group w-100 align-items-left flex-wrap'>
+                        <div>
+                            <button class="btn btn-primary btn-lg" type='submit' style='margin-left: 45px; border-radius: var(--bs-border-radius); margin-top: 10px; background: blue'>Старт</button>
+                        </form>
+                        </div>
+                        <div>
+                            <form method='POST' action='/current_state'  id="model-select" enctype="multipart/form-data">
+                                <button class="btn btn-primary btn-lg" type='submit' style='margin-left: 15px; border-radius: var(--bs-border-radius); margin-top: 10px; background: blue'>Проверить процесс обучения</button>
+                            </form>
+                        </div>
+                        <div>
+                            {% if flag %}
+                                <p></p>
+                            {% else %}
+                                <form method='POST' action='/hide'  id="model-select" enctype="multipart/form-data">
+                                    <button class="btn btn-primary btn-lg" type='submit' style='margin-left: 15px; border-radius: var(--bs-border-radius); margin-top: 10px; background: greyblue'>Скрыть</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% if flag %}
+                    <p></p>
+                {% else %}
+                    <iframe style="width: 95%; height: 26vh; background-color: #fff; margin-left: 44px; border-radius:var(--bs-border-radius)"
+                        frameborder='0'
+                        src="{{ url_for('display_train_result', filename='current_results.html') }}">
+                    </iframe>
+                {% endif %}
+            </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</html>
