@@ -7,7 +7,6 @@ from datasets import ClassLabel, DownloadConfig
 import shutil
 
 from training.split_data import *
-# from split_data import *
 
 import argparse
 
