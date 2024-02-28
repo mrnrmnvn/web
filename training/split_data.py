@@ -145,23 +145,6 @@ def do_the_splits(PATH_TO_YOUR_DATA: str, NER_TAGS_TO_KEEP: list, useless=False)
                 extra.extend(twt_list[to_cut:])
             else:
                 temporary.extend(twt_list)
-        
-#   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
-        # # поскольку тэг event нравномерно распределялся по выборкам:
-        # without_event = [w for w in b_tags if w != 'B-EVENT']
-        # event_only = []
-        # event_counter = 0
-        # for text in texting:
-        #     if "B-EVENT" in text:
-        #         event_counter += 1
-        #         if all([True if tag not in text else False for tag in without_event]):
-        #             event_only.append(text)
-        
-        # for ev in event_only:
-        #     extra.append(ev)
-        #     if ev in temporary:
-        #         temporary.remove(ev)            
-#   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #   #
                 
         for text in train:
             if text not in temporary and text not in extra:
@@ -179,9 +162,7 @@ def do_the_splits(PATH_TO_YOUR_DATA: str, NER_TAGS_TO_KEEP: list, useless=False)
                 
         print('train texts after verification: ', len(temporary))
         print('texts for 2nd and 3rd splits: ', len(extra), '\n')
-        
-    # return temporary, extra
-    
+            
         final_lines = []
         for temp_text in temporary:
             final_lines.extend(temp_text.split())
