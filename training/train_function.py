@@ -1,5 +1,4 @@
 from training.from_conll_to_hf import *
-# from from_conll_to_hf import *
 
 from transformers import AutoTokenizer, DataCollatorForTokenClassification, AutoModelForTokenClassification, TrainingArguments, Trainer, EarlyStoppingCallback, IntervalStrategy
 from datasets import load_metric
@@ -17,12 +16,11 @@ import argparse
 import random
 import torch
 
-# max_steps:int=3000
 
 def train_ner_function(file_path:str, tags:str, model:str, where_current:str=None, export:bool=False, batch_size:int=8, num_train_epochs:float=10.0, max_steps:int=3500, weight_decay:float=1e-5, learning_rate:float=2e-5, output_dir:str='trained_model', nickname:str='temp_model', say_when:int=8, threshold:float=0.05, tf_weights=False):
     
     current = os.getcwd()
-    with io.open(os.path.join(f'{os.getcwd()}\\full_NER\\static\\uploads\\current_results.html'), 'w', encoding='utf-8') as start_file:
+    with io.open(os.path.join(f'{os.getcwd()}\\static\\uploads\\current_results.html'), 'w', encoding='utf-8') as start_file:
         start_file.write(' ')
 
     print(tags)
@@ -110,7 +108,6 @@ def train_ner_function(file_path:str, tags:str, model:str, where_current:str=Non
 
     data_collator = DataCollatorForTokenClassification(tokenizer)
 
-    
     metric = load_metric("seqeval")
 
     def compute_metrics(p):
@@ -173,7 +170,7 @@ def train_ner_function(file_path:str, tags:str, model:str, where_current:str=Non
     
     print("\nTRAINING STARTED!\n")
     
-    where_current = os.path.join(f'{os.getcwd()}\\full_NER\\static\\uploads\\current_results.html')
+    where_current = os.path.join(f'{os.getcwd()}\\static\\uploads\\current_results.html')
     trainer.train(i_want_to_print=True, path_to_print=where_current)
     
     print("\nEVALUATING ON THE TEST SPLIT...")
@@ -185,7 +182,7 @@ def train_ner_function(file_path:str, tags:str, model:str, where_current:str=Non
     if trainer.state.best_model_checkpoint is None:
         print('Данных недостаточно для обучения, модель не сохранена')
         try:
-            with io.open(f'{os.getcwd()}\\full_NER\\static\\uploads\\current_results.html', 'w', encoding='utf-8') as f:
+            with io.open(f'{os.getcwd()}\\static\\uploads\\current_results.html', 'w', encoding='utf-8') as f:
                 f.write('Данных недостаточно для обучения, модель не сохранена')
         except:
             print('error')
@@ -222,6 +219,3 @@ def train_ner_function(file_path:str, tags:str, model:str, where_current:str=Non
 
         with open(os.path.join(f'{trainer.state.best_model_checkpoint}\\parameters.json'), 'w', encoding='utf-8') as params_file:
             json.dump(new_dump, params_file, indent=4)
-
-
-# train_ner_function(file_path=fr'C:\Users\MRZholus\Desktop\python_test\old_example_new.txt', tags='INDEX,ADDRESS', model='C:\\Users\\MRZholus\\Desktop\\python_test\\NER\\models\\bert-base-multilingual-cased')
